@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=360,user-scalable=no,minimum-scale=0.6,maximum-scale=2">
+<script>
+    var cliw=document.documentElement.clientWidth;
+    if(cliw<768){document.getElementsByTagName("html")[0].style.fontSize=cliw/3+"px";}
+    else{document.getElementsByTagName("html")[0].style.fontSize=360/3+"px";}
+</script>
+<style>
+body,ul{margin:0;padding:0;font-size:0.16rem;color:white;}
+a{text-decoration: none;color:white;}
+li{list-style:none;}
+#wrap{width:100%;height:100%;position:absolute;top:0;left:0;overflow:hidden;}
+#wrap .head{height:0.4rem;background:#000;border-top:2px solid gray;border-bottom:2px solid gray;text-align:center;line-height:0.4rem;}
+#wrap .cli{width:0.5rem;height:0.2rem;border:1px solid gray;border-radius:10%;position:absolute;top:0.1rem;line-height:0.2rem;}
+#wrap .cli:nth-of-type(1){left:0.2rem;display:none;}
+#wrap .cli:nth-of-type(2){right:0.2rem;}
+#wrap .content{width:100%;position:absolute;top:0.4rem;left:0;bottom:0.5rem;background:black;overflow:auto;}
+#wrap .piclist{position:relative;}
+#wrap .piclist li{position:absolute;width:1rem;height:1rem;background-size:cover;border:1px solid black;box-sizing: border-box;top:0;left:0;transition:500ms;}
+#wrap .foot{height:0.6rem;width:100%;position:absolute;left:0;bottom:0;text-align:center;background: #3f3f3f;}
+#wrap .active{background:black;}
+#wrap .foot a{float:left;width:1.5rem;line-height:0.6rem;text-align:center;}
+</style>
+</head>
+<body>
+<div id="wrap">
+    <div class="head">
+        <a href="#" class="cli">删除</a>
+        相机相册
+        <a href="#" class="cli">选择</a>
+    </div>
+    <div class="content">
+        <ul class="piclist" id="piclist">
+        </ul>
+    </div>
+    <div class="foot">
+        <a href="#" class="active">手机相册</a>
+        <a href="#">所有相册</a>
+    </div>
+</div>
+
+<script>
+    var adata=[];
+    for(var i=1;i<=17;i++){
+        adata[i-1]="img/a"+i+".jpg"
+    }
+    var owrap=document.getElementById('wrap');
+    var opiclist=document.getElementById('piclist');
+    var ali=opiclist.getElementsByTagName('li');
+    var odele=owrap.getElementsByClassName('dele')[0];
+    var mhtml='';
+    for(var i=0;i<adata.length;i++){
+        mhtml+="<li style='background-image:url("+adata[i]+");'></li>";
+    }
+    if(cliw>768){owrap.style.width=360+'px';}
+    else{owrap.style.width='100%';}
+    opiclist.innerHTML=mhtml;
+    var acli=owrap.getElementsByClassName('cli');
+    var adelet=[];
+    var onoff=true;
+    if(cliw>768){
+        acli[1].addEventListener('click',tend,false);
+        acli[0].addEventListener('click',delet,false);
+    }
+    else{
+        acli[1].addEventListener('touchend',tend,false);
+        acli[0].addEventListener('touchend',delet,false);
+    }
+    setTimeout(getlt,300);
+    function getlt(){
+        for(var i=0;i<ali.length;i++){
+            ali[i].style.left=i%3+'rem';
+            ali[i].style.top=Math.floor(i/3)+'rem';
+        }
+    }
+    function tend(){
+        if(onoff){
+            acli[1].innerHTML='取消';
+            for(var i=0;i<ali.length;i++){
+                ali[i].index=i;
+                ali[i]._left=parseInt(ali[i].style.left);
+                if(cliw>768){ali[i].addEventListener('click',selct,false);}
+                else{ali[i].addEventListener('touchend',selct,false);}
+            }
+        }
+        else{
+            acli[1].innerHTML='选择';
+            for(var i=0;i<ali.length;i++){
+                ali[i].style.opacity=1;
+                ali[i].style.width=1+'rem';
+                ali[i].style.height=1+'rem';
+                if(cliw>768){ali[i].removeEventListener('click',selct,false);}
+                else{ali[i].removeEventListener('touchend',selct,false);}
+            }
+            acli[0].style.display='none';
+            adelet.length=0;
+        }
+        onoff=!onoff;
+    }
+    function selct(){
+        this.style.opacity=0.6;
+        this.style.width=0.6+'rem';
+        acli[0].style.display='block';
+        adelet.push(this.index);
+    }
+    function delet(){
+        adelet=adelet.sort(function(a,b){return a-b;});
+        while(adelet.length){
+            var inum=adelet.pop();
+            opiclist.removeChild(ali[inum]);
+            getlt();
+        }
+        onoff=false;
+        tend();
+    }
+</script>
+</body>
+</html>

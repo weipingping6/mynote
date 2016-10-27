@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>简单小游戏</title>
+<style>
+body{background:#666}
+#btn{margin:10px auto;width:50px;}
+#div1{width:600px;margin:0px auto;}
+#can{background:#F9F}
+</style>
+<script>
+window.onload=function(){
+ var oc=document.getElementById('can');
+ var ocg=oc.getContext('2d');
+ var obtn=document.getElementById('btn').getElementsByTagName('input')[0];
+ var yimg=new Image();
+ var i=0;
+ var angle=0;
+ yimg.src='img/shoot.png';
+ yimg.onload=function(){
+   var timer1=setInterval(draw,50)
+   function draw(){
+	 //绘制路径
+	 ocg.clearRect(0,0,oc.width,oc.height)
+	 ocg.beginPath();
+	 ocg.arc(300,200,200,-1/2*Math.PI,Math.PI,false)
+	 ocg.stroke();
+	 ocg.beginPath();
+	 ocg.arc(250,200,150,Math.PI,2*Math.PI,false)
+	 ocg.stroke();
+	 ocg.beginPath();
+	 ocg.arc(400,200,20,0,2*Math.PI,false)
+	 ocg.stroke();
+	 
+	 for(var i=0;i<ball.length;i++){
+	  ocg.fillStyle='#193b45'
+	  ocg.beginPath();
+	  ocg.arc(ball[i].x,ball[i].y,20,0,2*Math.PI,false)
+	  ocg.fill();}
+	 for(var i=0;i<newarc.length;i++){
+	  ocg.save();
+	  ocg.fillStyle='#7cc455';
+	  ocg.beginPath();
+	  ocg.arc(newarc[i].x,newarc[i].y,20,0,2*Math.PI,false)
+	  ocg.fill();
+	  ocg.restore()}
+	  
+	 ocg.save()
+	 ocg.translate(300,200)
+	 ocg.rotate(angle)
+	 ocg.translate(-40,-44)
+	 var oimg=ocg.drawImage(yimg,0,0)
+	 ocg.restore();
+	 
+	 ocg.save()
+	 ocg.font='50px impact'
+	 ocg.strokeStyle='#339'
+	 ocg.shadowOffsetX=8;ocg.shadowOffsetY=5;
+	 ocg.shadowColor='#0F9'
+	 var str='简单小游戏~~';
+	
+	 var w=ocg.measureText(str).width
+	 ocg.strokeText(str,(oc.width-w)/2,500)
+	 ocg.restore();
+	 
+	 ocg.save()
+	 ocg.font='20px impact';
+	 ocg.strokeStyle='#000';
+	 var sp1='点击小植物发射子弹，以击毙小球';
+	 var sp2='若小球到达终点就失败了哦，快开始游戏吧!';
+	 var w1=ocg.measureText(sp1).width;
+	 var w2=ocg.measureText(sp2).width;
+	 ocg.strokeText(sp1,(oc.width-w1)/2,530);
+	 ocg.strokeText(sp2,(oc.width-w2)/2,560)
+	 ocg.restore()
+   }
+   
+   
+   var timer2=setInterval(function(){
+	for(var i=0;i<ball.length;i++){
+	  ball[i].num++;
+	  if(ball[i].num==270){
+		  ball[i].r=150;
+		  ball[i].ox=250;
+		  ball[i].oy=50}
+	  if(ball[i].num==270+180){
+		  alert('游戏结束了~~~');}
+	  ball[i].x=ball[i].ox+Math.sin(ball[i].num*Math.PI/180)*ball[i].r;
+	  ball[i].y=ball[i].oy+ball[i].r-Math.cos(ball[i].num*Math.PI/180)*ball[i].r;}
+	for(var i=0;i<newarc.length;i++){
+	  newarc[i].x=newarc[i].x+newarc[i].sx;
+	  newarc[i].y+=newarc[i].sy; }
+	  
+	for(var i=0;i<ball.length;i++){
+	  for(var j=0;j<newarc.length;j++){
+		if(pengz(ball[i].x,ball[i].y,newarc[j].x,newarc[j].y) ){
+			ball.splice(i,1)
+			newarc.splice(j,1)
+			break;} 
+	  }	
+	}
+   },50)
+   
+   obtn.onoff=true;
+   obtn.onclick=function(){
+	 if(this.onoff){	 
+	   var myt=setInterval(timer,550);
+	   this.onoff=false;
+	 }
+   }
+   
+   var ball=[];
+   function timer(){
+	 ball.push({x:300,y:0,r:200,num:0,ox:300,oy:0})
+   }
+   
+   oc.onmousemove=function mousemove(ev){
+	 var ev=ev||event;
+	 var x=ev.clientX-oc.offsetLeft;
+	 var y=ev.clientY-oc.offsetTop;
+	 var a=x-300;	var b=y-200;
+	 var c=Math.sqrt(a*a+b*b);
+	 if(a>0&&b<0){angle=Math.asin(b/c)-1/2*Math.PI}
+	 else if(a>0){angle=-Math.asin(a/c);}
+	 if(a<0&&b<0){angle=-(Math.asin(b/c) - 1/2*Math.PI);}
+	 else if(a<0){angle=-Math.asin(a/c)}  
+   }
+   
+     var newarc=[]; 
+   oc.onmousedown=function mousedown(ev){
+     var ev=ev||event;
+	 var x=ev.clientX-oc.offsetLeft;
+	 var y=ev.clientY-oc.offsetTop;
+	 var a=x-300;	var b=y-200;
+	 var c=Math.sqrt(a*a+b*b)
+	 var speed=8;
+	 var sx=speed*a/c;
+	 var sy=speed*b/c;
+	 newarc.push({x:300,y:200,sx:sx,sy:sy});  
+   }
+ 
+  function pengz(x1,y1,x2,y2){
+    var x=x2-x1;  var y=y2-y1;
+	var c=Math.sqrt(x*x+y*y);
+	return c<40?true:false; }
+ };
+}
+</script>
+</head>
+
+<body>
+<div id='btn'>
+  <input type='button' value='开始游戏' />
+</div>
+<div id='div1'>
+  <canvas id='can' width='600' height='600'>
+  </canvas>
+</div>
+</body>
+</html>

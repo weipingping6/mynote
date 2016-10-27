@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>JS实现图片缩放</title>
+<style>
+ul,li{padding:0;margin:0}
+#ul1{width:255px;height:255px;margin:0 auto;border:1px solid black;position:relative;}
+#ul1 li img{width:75px;height:75px;opacity:0.6;filter:alpha(opacity:60)}
+#ul1 li{width:75px;height:75px;float:left;margin:5px;list-style:none;}
+</style>
+</head>
+
+<body>
+  <h1>移入图片试试吧...</h1>
+  <ul id='ul1'>
+    <li>
+      <img src='img/a1.jpg' />
+    </li>
+    <li>
+      <img src='img/a2.jpg' />
+    </li>
+    <li>
+      <img src='img/a3.jpg' />
+    </li>
+    <li>
+      <img src='img/a4.jpg' />
+    </li>
+    <li>
+      <img src='img/a5.jpg' />
+    </li>
+    <li>
+      <img src='img/a6.jpg' />
+    </li>
+    <li>
+      <img src='img/a7.jpg' />
+    </li>
+    <li>
+      <img src='img/a8.jpg' />
+    </li>
+    <li>
+      <img src='img/a9.jpg' />
+    </li>
+  </ul>
+<script>
+  var oul=document.getElementById('ul1');
+  var aimg=oul.getElementsByTagName('img');
+  //布局转换
+  for(var i=0;i<aimg.length;i++){
+    aimg[i].style.left=aimg[i].offsetLeft+'px';
+    aimg[i].style.top=aimg[i].offsetTop+'px';
+  }
+  for(var i=0;i<aimg.length;i++){
+	aimg[i].style.position='absolute';
+	aimg[i].style.margin=0}
+  //事件添加
+  for(var i=0;i<aimg.length;i++){
+	  var minzindex=1;
+	aimg[i].onmouseover=function(){
+	  this.style.zIndex=minzindex++;
+	  move(this,{width:150,height:150,marginLeft:-38,marginTop:-38,opacity:100})	}  
+    aimg[i].onmouseout=function(){
+	  move(this,{width:75,height:75,marginLeft:0,marginTop:0,opacity:60})	}  
+  }
+  
+  function move(obj,json,endfn){
+  clearInterval(obj.timer);
+  obj.timer=setInterval(function(){
+	var bstop=true;
+	for(var attr in json){
+	var cur='';
+	if(attr=='opacity'){cur=parseInt(parseFloat(getStyle(obj,attr)*100))}
+	else{ cur=parseInt(getStyle(obj,attr))}
+	var speed=(json[attr]-cur)/8;
+	speed=speed>0?Math.ceil(speed):Math.floor(speed);
+	if(cur!=json[attr]){bstop=false;}
+		if(attr=='opacity'){
+			obj.style.filter='alpha(opacity:'+(cur+speed)+')';
+			obj.style.opacity=(cur+speed)/100;
+			}
+		else{obj.style[attr]=cur+speed+'px';}  }
+	if(bstop){
+		clearInterval(obj.timer)
+		if(endfn){endfn()}}
+	},30)
+}
+function getStyle(obj,attr){
+	return obj.currentStyle?obj.currrentStyle[attr]:getComputedStyle(obj)[attr]}
+</script>
+</body>
+</html>

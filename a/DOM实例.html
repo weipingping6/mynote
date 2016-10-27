@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加删除行</title>
+<style>
+#btn1{margin:10px;}
+tr{border:1px solid #0F9;}
+td{border-left:1px solid #0F9;text-align:center;}
+</style>
+</head>
+
+<body>
+<input type='button' id='btn1' value='添加一行'/>
+<table id='tab1' style='width:500px;'>
+  <thead style='background:#dadbdd'>
+    <tr>
+      <td>学号</td>
+      <td>姓名</td>
+      <td>性别</td>
+      <td>操作</td>
+    </tr>
+  </thead>
+  <tbody>
+  
+  </tbody>
+</table>
+
+<script>
+var obtn=document.getElementById('btn1');
+var otab=document.getElementById('tab1');
+var otb=otab.tBodies[0];
+var data=[
+	  {num:831,name:'老一',sex:'女'},
+	  {num:232,name:'老二',sex:'男'},
+	  {num:354,name:'老三',sex:'男'},
+	  {num:324,name:'老四',sex:'女'}
+	  ];
+for(var i=0;i<data.length;i++){
+  var otr=document.createElement('tr');
+  var otd=document.createElement('td');
+  otd.innerHTML=data[i].num;
+  otr.appendChild(otd); 
+  var otd=document.createElement('td');
+  otd.innerHTML=data[i].name;
+  otr.appendChild(otd);
+  var otd=document.createElement('td');
+  otd.innerHTML=data[i].sex;
+  otr.appendChild(otd);
+  var otd=document.createElement('td');
+  otr.appendChild(otd); 
+  var oa=document.createElement('a');
+  oa.innerHTML='删除';
+  oa.href='javascript:;';
+  otd.appendChild(oa);
+  otb.appendChild(otr);
+};
+clicka();
+changecolor();
+obtn.onclick=function(){
+  var otr=document.createElement('tr');
+  var otd=document.createElement('td')
+  otd.innerHTML=prompt('请输入学号')
+  otr.appendChild(otd);
+  var otd=document.createElement('td');
+  otd.innerHTML=prompt('请输入姓名');
+  otr.appendChild(otd);
+  var otd=document.createElement('td');
+  otd.innerHTML=prompt('请输入性别');
+  otr.appendChild(otd);
+  var otd=document.createElement('td');
+  otr.appendChild(otd);
+  var oa=document.createElement('a');
+  oa.innerHTML='删除';
+  oa.href='javascript:;';
+  otd.appendChild(oa);
+  otb.appendChild(otr);
+  clicka();
+  changecolor();
+}
+function clicka(){
+  var aa=document.getElementsByTagName('a');
+  for(var i=0;i<aa.length;i++){
+	aa[i].onclick=function(){
+	  otb.removeChild(this.parentNode.parentNode)
+	  changecolor();
+	}
+  }
+}
+function changecolor(){
+  for(var j=0;j<otb.rows.length;j++){
+	if(j%2){otb.rows[j].style.background=''}
+	else{otb.rows[j].style.background='#eceef1'}
+  }  
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>自定义播放器</title>
+<style>
+#d1{width:300px;height:15px;background:#666;margin-bottom:10px;position:relative;}
+#d3{width:300px;height:15px;background:#666;position:relative;}
+#d2{width:20px;height:15px;position:absolute;background:red;}
+#d4{width:20px;height:15px;position:absolute;background:yellow;left:280px}
+</style>
+<script>
+window.onload=function(){
+var ainp=document.getElementsByTagName('input');
+var ov=document.getElementById('v1')
+var timer=null;
+
+var od1=document.getElementById('d1');
+var od2=document.getElementById('d2');
+var od3=document.getElementById('d3');
+var od4=document.getElementById('d4');
+  ainp[0].onclick=function(){
+    if(ov.paused){
+		ov.play();
+		this.value='暂停'
+		timer=setInterval(function(){nowtime()},1000)
+		}
+	else{
+		ov.pause();
+		this.value='播放'
+		clearInterval(timer)}
+  }
+  ainp[2].value=changetime(ov.duration);
+  ainp[3].onclick=function(){
+	if(ov.muted){
+	  ov.volume=1;
+	  this.value='静音';
+	  od4.style.left=280+'px';
+	  ov.muted=false
+	}
+	else{
+	  ov.volume=0;this.value='取消静音';
+	  od4.style.left=0;
+	  ov.muted=true
+	}
+  }
+  var onoff=true;
+    ainp[4].onclick=function(){
+    if(onoff){
+	  ov.width=document.documentElement.clientWidth;
+	  ov.height=document.documentElement.clientHeight;
+	  this.value='退出全屏'
+	  onoff=false}
+	else{
+	  ov.width=ov.videoWidth;
+	  ov.height=ov.videoHeight;
+	  onoff=true;
+	  this.value='全屏'}
+  }
+   
+   drag(d2)
+   od4.onmousedown=function(ev){
+	var ev=ev||event;
+	disx=ev.clientX-od4.offsetLeft;
+	document.onmousemove=function(ev){
+	 var ev=ev||event;
+	 var l=ev.clientX-disx;
+	 var scale=l/280;
+	 if(l<=0){l=0}
+	 if(l>280){l=280}
+	 od4.style.left=l+'px';
+	 ov.volume=scale;
+	}
+	 document.onmouseup=function(){
+	  document.onmousemove=null;
+	  document.onmouseup=null;
+	 } 
+	return false; 
+   }
+
+  function nowtime(){
+	ainp[1].value=changetime(ov.currentTime)
+	var rate=ov.currentTime/ov.duration;
+	od2.style.left=rate*280+'px';}
+  
+  function changetime(num){
+	num=totwo(parseInt(num))
+	oh=totwo(Math.floor(num/3600))
+	om=totwo(Math.floor(num%3600/60))
+	os=totwo(Math.floor(num%3600%60))
+	return oh+':'+om+':'+os 
+  }
+  function totwo(a){
+	if(a<=9){return '0'+a;}
+	else{return ''+a;}  
+  }
+  function drag(obj){
+   obj.onmousedown=function(ev){
+	var ev=ev||event;
+	disx=ev.clientX-obj.offsetLeft;
+	document.onmousemove=function(ev){
+	 var ev=ev||event;
+	 var l=ev.clientX-disx;
+	 var scale=l/280;
+	 if(l<=0){l=0}
+	 if(l>280){l=280}
+	 obj.style.left=l+'px';
+	 ov.currentTime=scale*ov.duration;
+	 nowtime()
+	}
+	 document.onmouseup=function(){
+	  document.onmousemove=null;
+	  document.onmouseup=null;
+	 }  
+   }
+  }
+}
+</script>
+</head>
+
+<body>
+<video id='v1' src='ved.mp4' ></video><br />
+<input type='button' value='播放' />
+<input type='button' value='00:00:00' />
+<input type='button' value='00:00:00' />
+<input type='button' value='静音' />
+<input type='button' value='全屏' /><br />
+进度条：
+<div id='d1'>
+  <div id='d2'></div>
+</div>
+音量控制：
+<div id='d3'>
+  <div id='d4'></div>
+</div>
+</body>
+</html>

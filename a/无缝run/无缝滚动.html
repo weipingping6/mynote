@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无缝滚动小实例</title>
+<style>
+#btn{width:100px;margin:20px auto;}
+*{margin:0;padding:0;}
+#div1{position:relative;border:1px solid black;width:680px;margin:0 auto;height:220px;overflow:hidden;}
+#div1 ul{position:absolute;left:0;}
+#div1 ul li{list-style:none;width:150px;padding:10px;height:200px;float:left;}
+#div1 ul li img{width:150px;height:200px}
+</style>
+</head>
+
+<body>
+<div id='btn'>
+  <input type='button' value='ToLeft'/>
+  <input type='button' value='ToRight' />
+</div>
+<div id='div1'>
+  <ul>
+   <li><img src="idol1.jpg" /></li>
+   <li><img src="idol2.jpeg" /></li>
+   <li><img src="idol4.jpg" /></li>
+   <li><img src="idol6.jpg" /></li>
+  </ul>
+</div>
+
+<script>
+  var od=document.getElementById('div1');
+  var oul=od.getElementsByTagName('ul')[0];
+  var ali=oul.getElementsByTagName('li');
+  var timer=null;
+  var abtn=document.getElementsByTagName('input');
+  var speed=0;
+  oul.innerHTML+=oul.innerHTML;
+  oul.style.width=ali.length*ali[0].offsetWidth+'px';
+  function dsq(){
+	  if(oul.offsetLeft<-oul.offsetWidth/2){
+		  oul.style.left=0}
+      else if(oul.offsetLeft>=0){
+		  oul.style.left=-oul.offsetWidth/2+'px';}
+	  oul.style.left=oul.offsetLeft+speed+'px';
+	}
+  timer=setInterval(dsq,30)
+  abtn[0].onclick=function(){ speed=-2};
+  abtn[1].onclick=function(){ speed=2};
+  for(var i=0;i<ali.length;i++){
+	ali[i].onmouseover=function(){clearInterval(timer)} 
+	ali[i].onmouseout=function(){timer=setInterval(dsq,30)} 
+  };	
+  
+  //运动函数封装
+  function move(obj,json,endfn){
+  clearInterval(obj.timer);
+  obj.timer=setInterval(function(){
+	var bstop=true;
+	for(var attr in json){
+	var cur='';
+	if(attr=='opacity'){cur=parseInt(parseFloat(getStyle(obj,attr)*100))}
+	else{ cur=parseInt(getStyle(obj,attr))}
+	var speed=(json[attr]-cur)/8;
+	speed=speed>0?Math.ceil(speed):Math.floor(speed);
+	if(cur!=json[attr]){bstop=false;}
+		if(attr=='opacity'){
+			obj.style.filter='alpha(opacity:'+(cur+speed)+')';
+			obj.style.opacity=(cur+speed)/100;
+			}
+		else{obj.style[attr]=cur+speed+'px';}  }
+	if(bstop){
+		clearInterval(obj.timer)
+		if(endfn){endfn()}}
+	},30)
+}
+function getStyle(obj,attr){
+	return obj.currentStyle?obj.currrentStyle[attr]:getComputedStyle(obj)[attr]}
+</script>
+</body>
+</html>

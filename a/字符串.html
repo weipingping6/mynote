@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>字符串方法的应用</title>
+<style>
+#inp-wrap{width:300px;text-align:center;}
+#inp-wrap input[type='text'],#change input[type='text']{width:150px;height:24px;}
+p{width:300px;border:1px solid #000;background:#FF9;padding:20px;font:18px/24px '宋体';text-indent:2em;}
+#change{position:relative;left:380px;top:-278px;width:300px;text-align:center;}
+#div1{width:300px;height:218px;border:1px solid #000;background:#FF9;;padding:20px;margin:10px 0px;font:20px/25px '宋体'}
+</style>
+</head>
+
+<body>
+  <div id='inp-wrap'>
+    <input id='t1' type='text' />
+    <input id='b1' type='button' value='查找' /><br/>
+    <input id='t2' type='text' />
+    <input id='b2' type='button' value='替换' />
+  </div>  
+  <p><span>前端对于网站来说，通常是指网站的前台部分，包括网站的表现层和结构层.因此前端技术一般分为前端设计和前端开发，前端设计一般可以理解为网站的视觉设计，前端开发则是网站的前台代码实现，包括基本的HTML和CSS以及JavaScript/ajax，以及比较高级的CSS3、HTML5和SVG等</span>......<a href='javascript:;'> >>收起</a></p>
+  <div id='change'>
+    <div id='div1'></div>
+    <input type='text' />
+    <input type='button' value='输入变色文字'/>
+  </div>  
+<script>
+  //查找和替换
+  var ot1=document.getElementById('t1');
+  var ot2=document.getElementById('t2');
+  var ob1=document.getElementById('b1');
+  var ob2=document.getElementById('b2');
+  var op=document.getElementsByTagName('p')[0];
+  var osp=op.getElementsByTagName('span')[0];
+  var str=osp.innerHTML;
+  ob1.onclick=function(){
+    var s=ot1.value;
+	if(!s)return;
+	op.innerHTML=str.split(s).join('<span style="background:black;color:white">'+ s +'</span>'); 
+	};	
+    ob2.onclick=function(){
+	var s=ot1.value;
+	var str=op.innerHTML;
+	op.innerHTML=str.split(s).join(ot2.value) 
+  };
+
+  //字符串实现展开折叠
+  var oa=op.getElementsByTagName('a')[0];
+  var onoff=true
+  oa.onclick=function(){
+	 if(onoff){ 
+    osp.innerHTML=str.substring(0,18);
+	oa.innerHTML='<<展开';
+	 }else{
+	osp.innerHTML=str;
+	oa.innerHTML='>>收起';};
+	onoff=!onoff;
+  };  
+  
+  //输入变色文字
+  var odiv=document.getElementById('div1');
+  var ochange=document.getElementById('change');
+  var inp=ochange.getElementsByTagName('input');
+  inp[1].onclick=function(){
+	var str=inp[0].value;
+	var arrc=['#f7cd5e','#6dcaf6','#f2958b','#93d280','#fc6a17'];
+	var arr=str.split('');
+	if(str!=''){
+	for(var i=0;i<arr.length;i++){
+	  arr[i]='<span style="background:'+arrc[i%arrc.length]+';">'+arr[i]+'</span>';
+	  inp[0].value='';};
+	  odiv.innerHTML+=arr.join(''); }
+	 else{alert('内容不能为空，请输入点内容吧~~~~~~')};
+	};
+</script>
+</body>
+</html>

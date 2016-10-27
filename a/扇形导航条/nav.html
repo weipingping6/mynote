@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>扇形导航条</title>
+<style>
+#div1{background:#CCC no-repeat;border:1px solid black;position:relative;width:300px;height:300px;margin:30px auto}
+#wrap{height:50px;width:50px;position:relative;top:200px;left:200px;border-radius:50%;}
+#home{position:absolute;top:0;left:0;border-radius:50%;background:white;width:42px;height:42px;text-align:center;font:14px/42px 'Arial';}
+#list{width:42px;height:42px;position:relative;margin:4px;}
+#wrap img{position:absolute;top:0;left:0;border-radius:50%;}
+</style>
+<script>
+window.onload=function(){
+	
+ var olist=document.getElementById('list');
+ var ow=document.getElementById('wrap');
+ var aimg=olist.getElementsByTagName('img');
+ var ohome=document.getElementById('home')
+ var onoff=true;
+ ohome.onclick=function(){
+   if(onoff){
+     this.innerHTML='close';
+	 this.style.WebkitTransform='rotate(-360deg)';onoff=false;
+	 for(var i=0;i<aimg.length;i++){
+	   aimg[i].style.transition='0.5s '+i*100+'ms';
+	   aimg[i].style.left=getlt(-150,90/4*i).l+'px';
+	   aimg[i].style.top=getlt(-150,90/4*i).t+'px';
+	   aimg[i].style.WebkitTransform='rotate(720deg)'
+	 }
+   }
+   else{this.style.WebkitTransform='rotate(360deg)';	 onoff=true;
+     for(var i=0;i<aimg.length;i++){
+	   aimg[i].style.transition='1s '+(aimg.length-i-1)*100+'ms';
+	   aimg[i].style.left=0+'px';
+	   aimg[i].style.top=0+'px';
+	   aimg[i].style.WebkitTransform='rotate(0deg)'
+	 }
+	 this.innerHTML='open';
+   }
+ };
+ 
+ for(var i=0;i<aimg.length;i++){
+   aimg[i].onclick=function(){
+	 this.style.transition='0.1s'
+     this.style.WebkitTransform='scale(2)';
+	 this.style.opacity=0.2;
+	 addend(this,end)
+   }
+   
+ }
+function end(){
+	 removeend(this,end)
+  this.style.transition='0.1s'
+  this.style.WebkitTransform='scale(1)';
+  this.style.opacity=1;
+ 
+}
+ 
+function getlt(ir,ideg){
+	var il=Math.round(ir*Math.sin(ideg*Math.PI/180));
+	var it=Math.round(ir*Math.cos(ideg*Math.PI/180));
+	return {l:il,t:it}	
+}
+function addend(obj,fn){
+  obj.addEventListener('WebkitTransitionEnd',fn,false);
+  obj.addEventListener('transitionend',fn,false);
+}
+function removeend(obj,fn){
+  obj.removeEventListener('WebkitTransitionEnd',fn,false);
+  obj.removeEventListener('transitionend',fn,false);
+}
+}
+</script>
+</head>
+
+<body>
+<div id='div1'>
+  <div id='wrap'>
+    <div id='list'>
+      <img src='img/clos.png' />
+      <img src='img/full.png' />
+      <img src='img/open.png' />
+      <img src="img/prev.png" />
+      <img src='img/refresh.png' />
+    </div>
+    <!--<img id='img1' src='img/home.png' />-->
+    <div id='home'>open</div>
+  </div>
+</div>
+</body>
+</html>

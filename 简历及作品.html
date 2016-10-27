@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MyDemo</title>
+<link rel='stylesheet' href='css/bootstrap.css'/>
+<style>
+body{font-family:Arial;}
+.container{background:#222222;color:white;}
+a{text-decoration:none;color:#CCC;}
+a:hover{color:white;text-decoration:none;}
+.col-lg-8{text-align:center;padding:20px;}
+.col-lg-4 img{width:260px;}
+#top-me{width:300px;height:100px;background:url(img/point.png) no-repeat;padding:10px 0;}
+#col1-text p{font:20px/30px 'Arial';text-indent:2em;color:rgba(255,255,255,0.9);text-align:left;padding:10px;margin:20px;}
+.btn{border:1px solid #CCC;margin:60px 0 30px;}
+.bot-text{font-weight:900;color:rgba(255,255,255,0.6);font-size:30px;background:linear-gradient(45deg,rgba(255,255,255,0) 5%,rgba(255,255,255,1) 6%,rgba(255,255,255,1) 9%,rgba(255,255,255,0) 10%);-webkit-background-clip:text;transition:1.5s;}
+</style>
+<script src='js/jquery-3.1.1.js'></script>
+<script src='js/bootstrap.js'></script>
+</head>
+
+<body>
+<div class='container'>
+  <div class='row'>
+    <div class='col-lg-8'>
+      <div id='top-me'><h1>ME</h1></div>
+      <div id='col1-text'>
+        <h2>hellow，你好！</h2>
+        <p>很高兴你看到了我，我叫魏萍，天津科技大学高分子材料与工程专业2016届应届毕业生。一次偶然的机会接触到前端，并产生了浓厚的兴趣。目前自学前端两个多月，学得越多，遇到的问题也就越多，实践是最好的老师，因此想在实践中学习进步，特来寻一份前端实习工作，快来了解一下我吧~~~</p> 
+      </div>       
+      <div class='btn'><a href='infomation.html' target="_blank">More about me</a></div>
+      <div class='bot-text'>KEEP ON LEARNING FOREVER</div>
+    </div>
+    <div class='col-lg-4'>
+       <img src='img/me-2.png' />
+    </div>
+  </div>
+</div>
+<script>
+  var bp=true;
+  setInterval(timer,1500)
+  function timer(){
+	if(bp){
+	  $('.bot-text').css('background-position','530px 0');
+	  bp=false;
+	}
+	else{
+	  $('.bot-text').css('background-position','-20px 0');
+	  bp=true;}
+  }
+</script>
+</body>
+</html>

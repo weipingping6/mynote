@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>链式运动实例</title>
+<style>
+ul,div,p,h1{padding:0;margin:0;}
+body{font:13px/20px '宋体';}
+#box{width:250px;position:fixed;bottom:0;right:0;}
+#box2{width:250px;height:300px;position:relative;background:rgb(255,251,222);right:0;bottom:-356px;border:2px solid rgb(115,118,120);border-radius:5px;border-bottom:none;z-index:1;}
+#box2-left{width:50px;height:300px;border-right:1px solid rgb(115,118,120);border-radius:5px;}
+#box2-left ul{list-style:none;font:18px/30px '宋体';text-align:center;}
+#box2-left ul a{text-decoration:none;}
+#box2-left ul a:hover{color:red;}
+#box2-left .show{color:red;}
+#box2-right{width:190px;position:absolute;top:0;right:0;margin:10px 5px;}
+#close{position:absolute;top:0;right:0;}
+#box1{width:250px;height:50px;position:relative;right:-204px;bottom:-20px;border:2px solid rgb(115,118,120);border-radius:5px;z-index:2;background:rgb(255,251,222);}
+#box1-left{width:50px;height:30px;font:18px/30px 'Arial';text-align:center;}
+#box1 img{position:absolute;right:0;bottom:22px;}
+#box1 p{width:250px;height:22px;font:15px/20px '宋体';text-align:center;}
+</style>
+</head>
+
+<body>
+<h3>这是一个链式运动的小应用，点击有下角试试吧~~~</h3>
+<div id='box'>
+  <div id='box2'>
+    <div id='box2-left'>
+      <ul>
+        <li class='show'><a href='javascript:;' class='show'>天气</a></li>
+        <li><a href='javascript:;'>新闻</a></li>
+        <li><a href='javascript:;'>体育</a></li>
+        <li><a href='javascript:;'>国际</a></li>
+      </ul>
+    </div>
+    <div id='box2-right'>
+      <h1>太康</h1>
+      <div>
+        <strong>今天(星期五)</strong>
+        <img src='img/2.png'/>
+        <p>今天是个好天气，太阳公公很高兴~~~</p>
+      </div>
+      <div>
+        <strong>明天(星期六)</strong>
+        <img src='img/3.png'/>
+        <p>星期六多云，太阳公公只露了半边脸~~~</p>
+      </div>
+      <div>
+        <strong>后天(星期日)</strong>
+        <img src='img/4.png'/>
+        <p>星期日下雨了，太阳公公完全消失了~~~</p>
+      </div>
+    </div>
+    <div id='close'>
+      <img src='img/6.png' />
+    </div>
+  </div>
+  
+  <div id='box1'>
+    <div id='box1-left'>Click</div>
+    <img src='img/5.png' />
+    <p>www.weiping.com</p>
+  </div>
+</div>
+
+<script>
+  var ob1=document.getElementById('box1');
+  var ob2=document.getElementById('box2');
+  var iopen=document.getElementById('box1-left');
+  var iclose=document.getElementById('close');
+  var astrong=document.getElementById('box2-right').getElementsByTagName('strong')
+  var arr=['日','一','二','三','四','五','六']
+  var odate=new Date().getDay();
+  astrong[0].innerHTML='今天（星期'+arr[odate]+'）';
+  astrong[1].innerHTML='明天（星期'+arr[(odate+1)%7]+'）';
+  astrong[2].innerHTML='后天（星期'+arr[(odate+2)%7]+'）';
+  var my=new Date().getFullYear();
+  var mm=new Date().getMonth();
+  var md=new Date().getDate();
+  ob1.getElementsByTagName('p')[0].innerHTML=my+'年'+(mm+1)+'月'+md+'日';  
+  
+  iclose.onclick=function(){
+    move(ob2,{'bottom':-356},function(){move(ob1,{'right':-204,'bottom':-20})})
+  }
+  iopen.onclick=function(){
+    move(ob1,{'right':0,'bottom':0},function(){move(ob2,{'bottom':0})})
+  }
+  
+  function move(obj,json,fn){
+	clearInterval(obj.timer);
+	obj.timer=setInterval(function(){
+	  var bestop=true;
+	  for(var attr in json){
+		var cur='';
+		if(attr=='opacity'){cur=parseInt(getStyle(obj,attr)*100)}
+		else{cur=parseInt(getStyle(obj,attr))}
+		var ispeed=(json[attr]-cur)/6;
+		ispeed=ispeed>0?Math.ceil(ispeed):Math.floor(ispeed);
+		if(cur!=json[attr]){
+			bestop=false;
+			if(attr=='opacity'){
+				obj.style.filter='alpha(opacity:'+(cur+ispeed)+')';
+			    obj.style.opacity=(cur+ispeed)/100;   }
+			else{obj.style[attr]=cur+ispeed+'px';}
+		}
+	  }
+	  if(bestop){	
+		clearInterval(obj.timer)
+		 if(fn){fn()}
+	  }
+	},30)
+  }
+
+  function getStyle(obj,attr){
+    if(obj.currentStyle){return obj.currentStyle[attr]}
+	else{return getComputedStyle(obj,false)[attr]}
+  }
+
+</script>
+</body>
+</html>
