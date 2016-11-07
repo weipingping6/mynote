@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>扇子打开合闭</title>
+<style>
+body{background:url(img/1-bg.jpg) no-repeat;background-size:cover;position:relative;}
+#wrap{position:absolute;top:360px;left:600px;}
+#wrap>div{width:200px;height:40px;border-radius:10px;position:absolute;top:0;left:0;transition:1s;transform-origin:10px 20px;text-align:center;}
+</style>
+</head>
+
+<body>
+	<div id='wrap'>
+		<div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</body>
+<script>
+	window.onload=function(){
+		var icolor=['#fe9233','#ffba24','#f6e803','#fdaefe','#ec1c48','#fdac00','#9553b5','#84dcf0','#18bebe','#0286bb','#94c64c','#6eb420'];
+		var owrap=document.getElementById('wrap');
+		var adiv=owrap.getElementsByTagName('div');
+		for(var i=0;i<adiv.length;i++){
+			adiv[i].style.background=icolor[i];
+		}
+		setTimeout(rotate,600)
+		var onoff=false;
+		adiv[11].onclick=function(){
+			if(onoff){
+				rotate();
+				onoff=!onoff;
+			}
+			else{
+				goback()
+				onoff=!onoff;
+			}
+		}
+		for(var i=0;i<adiv.length-1;i++){
+			adiv[i].index=i;
+			adiv[i].onclick=function(){
+				for(var j=0;j<adiv.length;j++){
+					var inum=343-14*j-77+14*this.index;
+					
+					if(j>this.index){adiv[j].style.transform='rotate('+(inum-10)+'deg)';}
+					else if(j<this.index){adiv[j].style.transform='rotate('+(inum+15)+'deg)';}
+					adiv[this.index].style.transform='rotate(270deg)';
+					/*else{adiv[j].style.transform='rotate('+inum+'deg)';}*/
+				}
+				
+			}
+		}
+		function rotate(){
+			for(var i=0;i<adiv.length;i++){
+				adiv[i].style.transform='rotate('+(343-14*i)+'deg)';
+			}
+		}
+		function goback(){
+			for(var i=0;i<adiv.length;i++){
+				adiv[i].style.transform='rotate(0deg)';
+			}
+		}
+	};
+</script>
+</html>
